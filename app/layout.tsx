@@ -25,6 +25,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteMetadata.title}`,
   },
   description: siteMetadata.description,
+  keywords: siteMetadata.keywords,
   openGraph: {
     title: siteMetadata.title,
     description: siteMetadata.description,

@@ -1,0 +1,34 @@
+---
+title: Laravel中时区修改与12/24小时切换
+date: '2023-08-06'
+tags: ['技术', '日志', '技巧']
+draft: false
+summary: Laravel中时区修改与12/24小时切换
+---
+
+一、Laravel时区修改
+Laravel开发时，你会发现时间总是不对，等数据库已经存了一大堆数据了才发现 `created_at` 完全不对，这时候就会很麻烦。
+
+所以一定要先去修改时区（开发国际性网站除外）。Laravel是歪果仁开发的框架，自然而然里面的时区也是歪果仁的时区，默认是祖鲁时间UTC时区，比北京时间偏移8个小时。
+
+```php
+// config/app.php
+'timezone' => 'UTC',
+// 修改为
+'timezone' => 'Asia/Shanghai',
+```
+
+将 `UTC` 改为亚洲上海时区即可正常显示时间。Well done.
+
+二、PHP的时间12小时与24小时切换
+这个非常简单，JavaScript写多了，PHP知识忘了好多，要恶补起来。
+
+```php
+date('Y-m-d h:i:s');
+// 这样是12小时制
+date('Y-m-d H:i:s');
+// 这样是24小时制
+// 小写h是12小时，大写H是24小时
+```
+
+O(∩_∩)O~

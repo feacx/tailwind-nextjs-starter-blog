@@ -26,9 +26,12 @@ export default function Footer() {
           <div>{` • `}</div>
           <Link href="/">{siteMetadata.title}</Link>
         </div>
-        <div className="mb-8 text-sm text-gray-500 dark:text-gray-400">
-          <Link href="https://github.com/timlrx/tailwind-nextjs-starter-blog">
-            Tailwind Nextjs Theme
+        <div className="mb-8 flex gap-2 text-xs text-gray-500 dark:text-gray-400">
+          <Link href="https://beian.miit.gov.cn/" rel="noopener noreferrer">
+            豫ICP备17030814号-1
+          </Link>
+          <Link href="豫公网安备 41032202000087号" rel="noopener noreferrer">
+            豫公网安备 41032202000087号
           </Link>
         </div>
       </div>

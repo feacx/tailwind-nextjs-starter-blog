@@ -1,0 +1,50 @@
+---
+title: Fedora 桌面版为任意软件设置快捷方式
+date: '2023-08-10'
+tags: ['技术', '日志', '技巧', 'Fedora', 'Linux']
+draft: false
+summary: 教你如何为 Fedora 桌面版上的任意软件设置快捷方式。
+---
+
+> 下面内容以 `Idea` 为例，其他软件的快捷方式设置方法类似。
+
+由于我的电脑硬件原因，没有办法使用 macOS，所以安装了 Fedora 的发行版，使用的版本是38。
+安装很容易，下载 Idea ，并解压到任意目录就行，但是每次启动很麻烦，需要找到所在目录执行 `./idea.sh` ，所以我添加了快捷方式。方法如下：
+
+使用记事本，输入：
+
+```
+[Desktop Entry]
+Name=Idea
+Comment=Code Editing. Redefined.
+GenericName=Text Editor
+Exec=/home/fea/文档/Soft/idea/bin/idea.sh // 路径请自行修改
+Icon=/home/fea/文档/Soft/idea/bin/idea.png // 路径请自行修改
+Type=Application
+StartupNotify=false
+StartupWMClass=Code
+Categories=TextEditor;Development;IDE;
+MimeType=text/plain;inode/directory;application/x-code-workspace;
+Actions=new-empty-window;
+Keywords=idea;
+```
+
+保存为 `Idea.desktop` ，保存到哪里都行。
+
+将这个文件移动到 `application` 目录：
+
+```
+// 第一个参数改成你的文件所在路径
+$ sudo mv ./idea.desktop /usr/share/application/idea.desktop
+```
+
+最重要的一步，我看网上其他的都是由于这个导致不出现的，这个是照着 `VsCode` 的权限配的：
+
+```
+$ cd /usr/share/application/idea.desktop
+$ sudo chmod 755 ./idea.desktop
+```
+
+可以看一下启动台，有没有出现 `idea` 的图标：
+
+O(∩_∩)O~

@@ -1,0 +1,175 @@
+---
+title: 使用 Docker 部署一个 Nginx 服务
+date: '2023-08-06'
+tags: ['技术', '日志', '技巧']
+draft: false
+summary: 一步步的教你使用 Docker 部署一个 Nginx 服务，并进行简单的配置。
+---
+
+> 此处我假定你已经安装了 docker 这个软件，如果没有安装，可以看之前的文章：docker 安装
+
+### 获取 Docker Hub 的 Nginx 镜像
+
+打开任意终端或命令行，输入 `docker pull nginx`，默认会下载最新 `latest` 版本的 Nginx 到镜像列表中。
+拉取成功后你会看到最后一行显示：`Digest ...` 字样。
+
+### 启动 Nginx 并映射到宿主机访问
+
+```
+$ docker run -it --rm -d -p 3333:80 --name web nginx
+```
+
+命令解释：
+
+> -it 为容器重新分配一个伪输入终端
+> --rm 退出容器时将其删除，如果你要驻留自己的配置，可以不加该参数
+> -d 后台驻留，不加该参数，终端停止，容器则随之停止
+> -p 端口映射，倒着读：将容器的 80 端口，映射到宿主机的 3333 端口
+> --name 为容器起个名字，随意撰写
+> nginx 启动的镜像是 nginx
+
+此时，打开你的浏览器访问：http://localhost:3333，可以看到一行大字：Welcome to nginx!
+到目前为止，已经成功用 Docker 启动了 Nginx
+
+### 配置及调试 Nginx
+
+官方的 nginx 镜像，采用的是 ubuntu 系统，当启动容器后，可以通过如下命令
+
+- 进入容器终端 bash
+
+```
+$ docker  exec  -it abcd bash
+```
+
+> 上方的 abcd 对应的是 docker 的容器名称，可以通过 docker ps 进行查看，输入容器ID的开头部分即可
+
+- 在容器的终端窗口执行下方命令，更新依赖列表
+
+```
+$ apt-get update
+```
+
+- 再执行安装 vim（默认是没有 vim 编辑器）
+
+```
+$ apt-get install vim
+```
+
+- 接着进入 nginx 配置目录：
+
+```
+$ cd /etc/nginx/conf.d/
+$ vim default.conf
+```
+
+- 编辑 nginx 配置文件，因为我是使用一个前端项目做示例，所以配置如下（使用 alias 与 root 的区别可以自行搜索）
+
+```
+...
+location {
+	alias /usr/share/nginx/html/;
+	index  index.html index.htm;
+    try_files $uri $uri/ /index.html;
+}
+...
+```
+
+- 测试是否通过 nginx 配置校验
+
+```
+$ nginx -t
+```
+
+- 重启 nginx
+
+```
+$ nginx -s reload
+```
+
+- 访问 http://localhost:3333/
+  > 不出意外，你已经可以访问自己的项目
+
+### 制作为镜像
+
+此处我还是以 Vue 项目举例
+
+- 打包 Vue 项目，默认为 dist
+
+```
+$ npm run build
+```
+
+编写 Dockerfile、default.conf，并放在项目根目录
+
+```
+FROM nginx
+COPY dist/ /usr/share/nginx/html/
+COPY default.conf /etc/nginx/conf.d/default.conf
+```
+
+> default.conf 文件内容如下
+
+```
+# nginx配置
+
+server {
+	listen 80;
+	server_name localhost;
+	#charset koi8-r;
+	access_log /var/log/nginx/host.access.log main;
+	error_log /var/log/nginx/error.log error;
+
+	### this is core code
+	location / {
+		alias /usr/share/nginx/html;
+		index index.html index.htm;
+		try_files $uri $uri/ /index.html;
+	}
+
+	# error_page 404 /404.html;
+	# redirect server error pages to the static page /50x.html
+
+	error_page 500 502 503 504 /50x.html;
+	location  = /50x.html {
+		root /usr/share/nginx/html;
+	}
+}
+```
+
+- 接着在项目根目录执行
+
+```
+$ docker build -t vue-project:v1 .
+```
+
+- 不出意外，你可以看到一大片输出及 success 提示
+- 执行第一步的进行测试镜像
+
+```
+$ docker run -it --rm -d -p 3333:80 --name web vue-project:v1
+```
+
+如果没有问题，镜像就执行完成了
+
+### 部署一个 Vue 项目
+
+直接启动上方的镜像即可
+
+### 部署一个 React 项目
+
+撰写中...
+
+### 部署一个 Go 项目
+
+撰写中...
+
+### 可能遇到的问题
+
+- 如下报错是因为没有启动
+
+```
+Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+
+# 执行下方命令即可
+$ systemctl start docker
+```

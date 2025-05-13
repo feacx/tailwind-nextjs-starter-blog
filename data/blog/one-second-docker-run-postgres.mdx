@@ -1,0 +1,13 @@
+---
+title: 一秒使用 Docker 运行 Postgres
+date: '2024-08-03'
+tags: ['技术', '日志', '技巧', 'Docker']
+draft: false
+summary: 教你如何一秒使用 Docker 运行 Postgres，以后会慢慢更新更多使用 Docker 一键启动的软件。
+---
+
+```bash
+docker run -d --name pg -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres:17
+```
+
+O(∩_∩)O~
