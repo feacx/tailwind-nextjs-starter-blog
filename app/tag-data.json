@@ -1,7 +1,7 @@
 {
-  "技术": 6,
-  "日志": 6,
-  "技巧": 6,
+  "technology": 6,
+  "log": 6,
+  "tips": 6,
   "fedora": 1,
   "linux": 1,
   "docker": 1
