@@ -51,7 +51,6 @@ export async function generateMetadata(props: {
 
   return {
     title: post.title,
-    keywords: post.keywords || '',
     description: post.summary,
     openGraph: {
       title: post.title,
