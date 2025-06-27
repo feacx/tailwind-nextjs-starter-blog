@@ -6,7 +6,7 @@ const siteMetadata = {
   description: '关注科技动态，分享有温度的技术、情感表达，用经济、技术、科技记录点滴生活',
   slogan: '科技、人文、技术、感悟',
   keywords:
-    '徐小鹏，前端开发，后端开发，技术博客，全栈，Web开发，JavaScript，Rust，TypeScript,Go Lang',
+    '徐小鹏,前端开发,后端开发,技术博客,全栈,Web开发,JavaScript,Rust,TypeScript,GoLang',
   language: 'zh-CN',
   theme: 'system', // system, dark or light
   siteUrl: 'https://fea.cx',
